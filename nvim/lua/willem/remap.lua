@@ -12,3 +12,14 @@ vim.keymap.set("n", "N", "Nzzzv")
 
 -- Does not overwrite paste buffer after delete
 vim.keymap.set("x", "<leader>p", [["_dP]])
+
+-- Spawn terminals
+vim.keymap.set("n", "ts", ":split | te<CR>")
+vim.keymap.set("n", "tvs", ":vsplit | te<CR>")
+vim.keymap.set("n", "tt", ":tabedit | te<CR>")
+
+-- Resize current split
+vim.keymap.set("n", "<leader>wi", ":vertical res +10<CR>")
+vim.keymap.set("n", "<leader>wd", ":vertical res -10<CR>")
+vim.keymap.set("n", "<leader>hi", ":res +10<CR>")
+vim.keymap.set("n", "<leader>hd", ":res -10<CR>")
