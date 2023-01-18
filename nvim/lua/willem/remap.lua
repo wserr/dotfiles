@@ -1,4 +1,4 @@
-vim.g.mapleader = " "
+vim.g.mapleader = "\\"
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 vim.keymap.set("n", "<leader>Pa", vim.cmd.PackerSync)
 
@@ -25,10 +25,20 @@ vim.keymap.set("n", "<leader>hi", ":res +10<CR>")
 vim.keymap.set("n", "<leader>hd", ":res -10<CR>")
 
 -- Add whole shebang
-vim.keymap.set("i", "<leader>s", "#!/usr/bin/env bash")
+vim.keymap.set("i", "<leader>sb", "#!/usr/bin/env bash")
 
 -- Add line to run docker indefinetely
-vim.keymap.set("i", "<leader>i", "ENTRYPOINT [\"/bin/sh\", \"-c\", \"tail -f /dev/null\"]")
+vim.keymap.set("i", "<leader>di", "ENTRYPOINT [\"/bin/sh\", \"-c\", \"tail -f /dev/null\"]")
 
 -- MarkdownPreview
 vim.keymap.set("n", "<leader>mp", "<cmd>MarkdownPreview<cr>")
+
+-- Go To ReadOnly mode in terminal TODO
+-- vim.keymap.set("t", "C-\\n", vim.cmd)
+
+-- Nvim tree
+vim.keymap.set("n", "<leader>t", ":NvimTreeToggle<CR>")
+vim.keymap.set("n", "<leader>tf", ":NvimTreeFocus<CR>")
+vim.keymap.set("n", "<leader>tff", ":NvimTreeFindFile<CR>")
+vim.keymap.set("n", "<leader>tc", ":NvimTreeCollapse<CR>")
+

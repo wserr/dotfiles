@@ -48,6 +48,14 @@ return require('packer').startup(function(use)
 		  {'rafamadriz/friendly-snippets'}, -- Optional
 	  }
   }
+
+  -- install without yarn or npm
+  use({
+      "iamcco/markdown-preview.nvim",
+      run = function()
+          vim.fn["mkdp#util#install"]()
+      end,
+  })
   use({
       "nvim-tree/nvim-tree.lua",
       requires = {
@@ -64,4 +72,5 @@ return require('packer').startup(function(use)
       end,
       ft = { "markdown" },
   })
+  use 'ekickx/clipboard-image.nvim'
 end)
