@@ -1,0 +1,10 @@
+require("lspconfig")
+
+require("lspconfig").sumneko_lua.setup({})
+require("lspconfig").rust_analyzer.setup({})
+require("lspconfig").bashls.setup({})
+require("lspconfig").prosemd_lsp.setup({})
+require("lspconfig").marksman.setup({})
+require("lspconfig").omnisharp.setup({})
+require("lspconfig").dockerls.setup({})
+require("lspconfig").tsserver.setup({})
