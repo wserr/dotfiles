@@ -2,4 +2,4 @@
 #
 # Run this script to copy over settings to .config folder
 #
-cp -r . ~/.config/nvim/
+cp -r . ~/repos/dotfiles/nvim/
