@@ -10,6 +10,7 @@ lsp.ensure_installed({
 	'rust_analyzer',
 })
 
+
 -- Fix Undefined global 'vim'
 lsp.configure('sumneko_lua', {
     settings = {
