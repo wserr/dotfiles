@@ -82,4 +82,5 @@ return require('packer').startup(function(use)
       ft = { "markdown" },
   })
   use 'ekickx/clipboard-image.nvim'
+  use 'nanozuki/tabby.nvim'
 end)

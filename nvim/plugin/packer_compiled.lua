@@ -205,6 +205,11 @@ _G.packer_plugins = {
     path = "/home/willem/.local/share/nvim/site/pack/packer/start/rust-tools.nvim",
     url = "https://github.com/simrat39/rust-tools.nvim"
   },
+  ["tabby.nvim"] = {
+    loaded = true,
+    path = "/home/willem/.local/share/nvim/site/pack/packer/start/tabby.nvim",
+    url = "https://github.com/nanozuki/tabby.nvim"
+  },
   ["telescope.nvim"] = {
     loaded = true,
     path = "/home/willem/.local/share/nvim/site/pack/packer/start/telescope.nvim",
