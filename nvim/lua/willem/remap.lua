@@ -28,7 +28,7 @@ vim.keymap.set("n", "<leader>hd", ":res -10<CR>")
 vim.keymap.set("i", "<leader>sb", "#!/usr/bin/env bash")
 
 -- Add line to run docker indefinetely
-vim.keymap.set("i", "<leader>di", "ENTRYPOINT [\"/bin/sh\", \"-c\", \"tail -f /dev/null\"]")
+vim.keymap.set("i", "<leader>di", 'ENTRYPOINT ["/bin/sh", "-c", "tail -f /dev/null"]')
 
 -- MarkdownPreview
 vim.keymap.set("n", "<leader>mp", "<cmd>MarkdownPreview<cr>")

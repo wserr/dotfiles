@@ -12,6 +12,6 @@ vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
 -- Opens window to search help tags
 vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
 
-vim.keymap.set('n', '<leader>gg', function()
+vim.keymap.set("n", "<leader>gg", function()
 	builtin.grep_string({ search = vim.fn.input("Grep > ") })
 end)
