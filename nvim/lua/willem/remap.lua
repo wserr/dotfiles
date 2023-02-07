@@ -42,3 +42,6 @@ vim.keymap.set("n", "<leader>tf", ":NvimTreeFocus<CR>")
 vim.keymap.set("n", "<leader>tff", ":NvimTreeFindFile<CR>")
 vim.keymap.set("n", "<leader>tc", ":NvimTreeCollapse<CR>")
 
+-- Formatter
+vim.keymap.set("n", "<leader>f", ":Format<CR>")
+vim.keymap.set("n", "<leader>F", ":FormatWrite<CR>")

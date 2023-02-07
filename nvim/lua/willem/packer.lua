@@ -57,14 +57,6 @@ return require('packer').startup(function(use)
           {'simrat39/rust-tools.nvim'}
 	  }
   }
-
-  -- install without yarn or npm
-  use({
-      "iamcco/markdown-preview.nvim",
-      run = function()
-          vim.fn["mkdp#util#install"]()
-      end,
-  })
   use({
       "nvim-tree/nvim-tree.lua",
       requires = {
@@ -83,4 +75,9 @@ return require('packer').startup(function(use)
   })
   use 'ekickx/clipboard-image.nvim'
   use 'nanozuki/tabby.nvim'
+  use ({
+      'XadillaX/json-formatter.vim',
+      run = 'npm install -g jjson'
+  })
+  use { 'mhartington/formatter.nvim' }
 end)
