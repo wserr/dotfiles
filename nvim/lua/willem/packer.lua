@@ -81,4 +81,11 @@ return require("packer").startup(function(use)
 		run = "npm install -g jjson",
 	})
 	use({ "mhartington/formatter.nvim" })
+
+	use({
+		"klen/nvim-test",
+		config = function()
+			require("nvim-test").setup()
+		end,
+	})
 end)
