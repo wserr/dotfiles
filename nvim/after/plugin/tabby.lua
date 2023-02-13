@@ -27,6 +27,10 @@ require("tabby.tabline").set(function(line)
 			}
 		end),
 		line.spacer(),
+        {
+            "%{%v:lua.require'jsonpath'.get()%}"
+        },
+		line.spacer(),
 		line.wins_in_tab(line.api.get_current_tab()).foreach(function(win)
 			return {
 				line.sep("", theme.win, theme.fill),

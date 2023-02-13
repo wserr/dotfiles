@@ -25,6 +25,12 @@ return require("packer").startup(function(use)
 	})
 
 	use("nvim-treesitter/nvim-treesitter", { run = ":TSUpdate" })
+	use({
+		"phelipetls/jsonpath.nvim",
+		requires = {
+			"nvim-tree/nvim-web-devicons", -- optional, for file icons
+		},
+	})
 	use("nvim-treesitter/playground")
 	use("theprimeagen/harpoon")
 	use("mbbill/undotree")
