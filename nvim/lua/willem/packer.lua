@@ -94,4 +94,9 @@ return require("packer").startup(function(use)
 			require("nvim-test").setup()
 		end,
 	})
+	-- Lua
+	use({
+		"folke/trouble.nvim",
+		requires = "nvim-tree/nvim-web-devicons"
+	})
 end)
