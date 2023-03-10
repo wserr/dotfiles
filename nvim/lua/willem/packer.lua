@@ -1,5 +1,4 @@
 -- This file can be loaded by calling `lua require('plugins')` from your init.vim
-
 -- Only required if you have packer configured as `opt`
 vim.cmd([[packadd packer.nvim]])
 
@@ -46,6 +45,8 @@ return require("packer").startup(function(use)
 			-- Autocompletion
 			{ "hrsh7th/nvim-cmp" }, -- Required
 			{ "hrsh7th/cmp-nvim-lsp" }, -- Required
+            { "dcampos/nvim-snippy" },
+            { "dcampos/cmp-snippy" },
 			{ "hrsh7th/cmp-buffer" }, -- Optional
 			{ "hrsh7th/cmp-path" }, -- Optional
 

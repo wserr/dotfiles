@@ -33,8 +33,8 @@ vim.keymap.set("i", "<leader>di", 'ENTRYPOINT ["/bin/sh", "-c", "tail -f /dev/nu
 -- MarkdownPreview
 vim.keymap.set("n", "<leader>mp", "<cmd>MarkdownPreview<cr>")
 
--- Go To ReadOnly mode in terminal TODO
--- vim.keymap.set("t", "C-\\n", vim.cmd)
+-- Go To ReadOnly mode in terminal
+vim.keymap.set("t","<C-[>" ,"<C-\\><C-N>")
 
 -- Nvim tree
 vim.keymap.set("n", "<leader>t", ":NvimTreeToggle<CR>")

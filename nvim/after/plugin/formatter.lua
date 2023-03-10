@@ -17,10 +17,18 @@ require("formatter").setup({
 			require("formatter.filetypes.lua").stylua,
 		},
 		rust = {
-			require("formatter.filetypes.rust").rustfmt,
+			function()
+				return {
+					exe = "rustfmt",
+					stdin = true,
+				}
+			end,
 		},
 		markdown = {
 			require("formatter.filetypes.markdown").prettier,
+		},
+		typescript = {
+			require("formatter.filetypes.typescript").prettier,
 		},
 
 		-- Use the special "*" filetype for defining formatter configurations on

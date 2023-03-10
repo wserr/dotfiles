@@ -1,10 +1,26 @@
 -- Completion Plugin Setup
 local cmp = require("cmp")
+local snippy = require("snippy")
+
+snippy.setup({
+	snippet_dirs = "~/.config/nvim/snippets",
+	hl_group = "Search",
+	mappings = {
+		is = {
+			["<Tab>"] = "expand_or_advance",
+			["<S-Tab>"] = "previous",
+		},
+		nx = {
+			["<leader>x"] = "cut_text",
+		},
+	},
+})
+
 cmp.setup({
 	-- Enable LSP snippets
 	snippet = {
 		expand = function(args)
-			vim.fn["vsnip#anonymous"](args.body)
+			snippy.expand_snippet(args.body)
 		end,
 	},
 	mapping = {
@@ -24,6 +40,7 @@ cmp.setup({
 	},
 	-- Installed sources:
 	sources = {
+		{ name = "snippy" }, -- nvim-cmp source for vim-vsnip
 		{ name = "path" }, -- file paths
 		{ name = "nvim_lsp", keyword_length = 3 }, -- from language server
 		{ name = "nvim_lsp_signature_help" }, -- display function signatures with current parameter emphasized

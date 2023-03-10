@@ -2,6 +2,13 @@ local rt = require("rust-tools")
 
 rt.setup({
 	server = {
+		settings = {
+			["rust-analyzer"] = {
+				check = {
+					command = "clippy",
+				},
+			},
+		},
 		on_attach = function(_, bufnr)
 			local opts = { buffer = bufnr, remap = false }
 			-- Hover actions
