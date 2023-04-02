@@ -200,4 +200,4 @@ bindsym Print exec flameshot gui
 
 gaps inner 5
 gaps outer 5
-gaps top 40
+gaps top 30
