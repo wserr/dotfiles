@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#
+
 # Run this script to copy over settings to .config folder
 
 echo "Copying i3 settings..."
@@ -13,3 +13,5 @@ cp -r polybar ~/.config/
 
 echo "Copying zshell settings..."
 cp zshell/.zshrc ~/
+
+echo "Done"
