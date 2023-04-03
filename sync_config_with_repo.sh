@@ -14,4 +14,7 @@ cp -r polybar ~/.config/
 echo "Copying zshell settings..."
 cp zshell/.zshrc ~/
 
+echo "Copying rofi settings..."
+cp -r rofi/ ~/.config/
+
 echo "Done"
