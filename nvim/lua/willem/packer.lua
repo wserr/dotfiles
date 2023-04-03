@@ -5,6 +5,11 @@ vim.cmd([[packadd packer.nvim]])
 return require("packer").startup(function(use)
 	-- Packer can manage itself
 	use("wbthomason/packer.nvim")
+	use("folke/tokyonight.nvim")
+	use({
+		"nvim-lualine/lualine.nvim",
+		requires = { "nvim-tree/nvim-web-devicons", opt = true },
+	})
 	use("puremourning/vimspector")
 
 	use({
@@ -12,15 +17,6 @@ return require("packer").startup(function(use)
 		tag = "0.1.1",
 		-- or                            , branch = '0.1.x',
 		requires = { { "nvim-lua/plenary.nvim" } },
-	})
-
-	use({
-		"rose-pine/neovim",
-		as = "rose-pine",
-		config = function()
-			require("rose-pine").setup()
-			vim.cmd("colorscheme rose-pine")
-		end,
 	})
 
 	use("nvim-treesitter/nvim-treesitter", { run = ":TSUpdate" })
@@ -45,8 +41,8 @@ return require("packer").startup(function(use)
 			-- Autocompletion
 			{ "hrsh7th/nvim-cmp" }, -- Required
 			{ "hrsh7th/cmp-nvim-lsp" }, -- Required
-            { "dcampos/nvim-snippy" },
-            { "dcampos/cmp-snippy" },
+			{ "dcampos/nvim-snippy" },
+			{ "dcampos/cmp-snippy" },
 			{ "hrsh7th/cmp-buffer" }, -- Optional
 			{ "hrsh7th/cmp-path" }, -- Optional
 
@@ -98,6 +94,6 @@ return require("packer").startup(function(use)
 	-- Lua
 	use({
 		"folke/trouble.nvim",
-		requires = "nvim-tree/nvim-web-devicons"
+		requires = "nvim-tree/nvim-web-devicons",
 	})
 end)
