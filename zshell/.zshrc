@@ -111,14 +111,19 @@ export VIMDATA=~/.local/share/nvim
 alias vim=nvim
 alias vi=nvim
 
-alias zshrc="vim ~/.zshrc"
-alias vimconfig="vim $VIMCONFIG"
-alias devops="vim ~/repos/devops-notes"
-alias proceedix="vim ~/repos/proceedix"
-alias apiv3="vim ~/repos/api-v3"
+alias zshrc="cd ~/.zshrc && vim ."
+alias vimc="cd $VIMCONFIG && vim ."
 
-alias sgreportal="vim ~/repos/sgre-portal"
-alias sgrebackend="vim ~/repos/sgre-as-backend-services"
+alias dots="cd ~/repos/dotfiles && vim ."
+
+alias devops="cd ~/repos/devops-notes && vim ."
+alias proceedix="cd ~/repos/proceedix && vim ."
+
+alias portal="cd ~/repos/service-admin-portal && vim ."
+alias backend="cd ~/repos/api-v3 && vim ."
+
+alias sgreportal="cd ~/repos/sgre-portal && vim ."
+alias sgrebackend="cd ~/repos/sgre-as-backend-services && vim ."
 
 
 PROMPT='%{$fg[yellow]%}  %D{%f/%m/%y} %D{%L:%M:%S} '$PROMPT
