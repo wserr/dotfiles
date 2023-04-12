@@ -111,8 +111,13 @@ export VIMDATA=~/.local/share/nvim
 alias vim=nvim
 alias vi=nvim
 
-alias zshrc="cd ~/.zshrc && vim ."
+
+alias docs="cd ~/repos/documentation && vim ."
+
+alias zshrc="cd vim ~/.zshrc"
 alias vimc="cd $VIMCONFIG && vim ."
+
+alias wiki="cd ~/repos/Proceedix%20General.wiki/ && vim ."
 
 alias dots="cd ~/repos/dotfiles && vim ."
 
