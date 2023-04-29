@@ -114,7 +114,7 @@ alias vi=nvim
 
 alias docs="cd ~/repos/documentation && vim ."
 
-alias zshrc="cd vim ~/.zshrc"
+alias zshrc="cd ~/.zshrc && vim ."
 alias vimc="cd $VIMCONFIG && vim ."
 
 alias wiki="cd ~/repos/Proceedix%20General.wiki/ && vim ."
@@ -126,9 +126,12 @@ alias proceedix="cd ~/repos/proceedix && vim ."
 
 alias portal="cd ~/repos/service-admin-portal && vim ."
 alias backend="cd ~/repos/api-v3 && vim ."
+alias k="kubectl"
 
 alias sgreportal="cd ~/repos/sgre-portal && vim ."
 alias sgrebackend="cd ~/repos/sgre-as-backend-services && vim ."
+
+alias pubip="curl https://ipinfo.io/ip"
 
 
 PROMPT='%{$fg[yellow]%}  %D{%f/%m/%y} %D{%L:%M:%S} '$PROMPT
@@ -136,3 +139,10 @@ PROMPT='%{$fg[yellow]%}  %D{%f/%m/%y} %D{%L:%M:%S} '$PROMPT
 export DOTNET_ROOT=$HOME/dotnet
 export PATH=$PATH:$HOME/dotnet
 export DOCKER_CONFIG=$HOME/.docker
+
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+
+# Generated for envman. Do not edit.
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
+
