@@ -24,11 +24,20 @@ require("formatter").setup({
 				}
 			end,
 		},
+		css = {
+			require("formatter.filetypes.css").prettier,
+		},
 		markdown = {
 			require("formatter.filetypes.markdown").prettier,
 		},
+		json = {
+			require("formatter.filetypes.json").prettier,
+		},
 		typescript = {
 			require("formatter.filetypes.typescript").prettier,
+		},
+		typescriptreact = {
+			require("formatter.filetypes.typescriptreact").prettier,
 		},
 
 		-- Use the special "*" filetype for defining formatter configurations on
