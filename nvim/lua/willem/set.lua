@@ -32,3 +32,7 @@ vim.opt.colorcolumn = "80"
 
 vim.o.showtabline = 2
 
+vim.cmd([[
+set encoding=utf8
+set guifont=JetBrainsMonoNL\ Nerd\ Font\ 11
+]])
