@@ -1,0 +1,10 @@
+snippet testmodule
+	#[cfg(test)]
+	mod tests {
+	    use super::*;
+
+    	#[test]
+    	fn ${1:var}() {
+			!todo()
+		}
+	}

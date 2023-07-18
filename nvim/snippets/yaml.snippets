@@ -1,0 +1,50 @@
+snippet config
+	apiVersion: v1
+	kind: ConfigMap
+	metadata:
+	  name: ${1:name}-config
+	data:
+	  test: "test"
+snippet service
+	apiVersion: v1
+	kind: Service
+	metadata:
+	  name: ${1:name}
+	spec:
+	  ports:
+	    - port: 80
+	      targetPort: 80
+	      protocol: TCP
+	  selector:
+	    app: ${2:appname}
+
+snippet deploy
+	apiVersion: apps/v1
+	kind: Deployment
+	metadata:
+	  name: ${1:name}
+	spec:
+	  selector:
+	    matchLabels:
+	      app: ${2:appname}
+	  replicas: 1
+	  template:
+	    metadata:
+	      labels:
+	        app: ${2:appname}
+	    spec:
+	      {{- if .Values.registry.secret_name }}
+	      imagePullSecrets:
+	        - name: {{.Values.registry.secret_name}}
+	      {{end}}
+	      containers:
+	        - name: ${2:appname}-container
+	          image: "{{ .Values.registry.location }}/${2:appname}:${3:tag}"
+	          imagePullPolicy: "Always"
+	          ports:
+	            - containerPort: 80
+	# env variables are used for aks environments, where secrets have to be published manually
+	# envFrom is for local / development useage
+	          envFrom:
+	            - configMapRef:
+	                name: ${4:configmap}
