@@ -35,6 +35,8 @@ vim.o.showtabline = 2
 vim.cmd([[
 set encoding=utf8
 set guifont=JetBrainsMonoNL\ Nerd\ Font\ 11
-set foldenable
 set foldmethod=indent
+set foldlevel=20
+set foldlevelstart=20
+set colorcolumn=0
 ]])

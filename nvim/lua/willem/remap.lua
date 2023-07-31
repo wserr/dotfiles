@@ -18,6 +18,9 @@ vim.keymap.set("n", "ts", ":split | te<CR>")
 vim.keymap.set("n", "tvs", ":vsplit | te<CR>")
 vim.keymap.set("n", "tt", ":tabedit | te<CR>")
 
+-- Spawn docker compose down -v
+vim.keymap.set("n", "tdv", ":tabedit | te docker compose down -v<CR>")
+
 -- Resize current split
 vim.keymap.set("n", "<leader>wi", ":vertical res +10<CR>")
 vim.keymap.set("n", "<leader>wd", ":vertical res -10<CR>")
