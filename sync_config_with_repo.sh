@@ -17,4 +17,7 @@ cp zshell/.zshrc ~/
 echo "Copying rofi settings..."
 cp -r rofi/ ~/.config/
 
+echo "Copying tmux settings..."
+cp -r tmux/ ~/
+
 echo "Done"
