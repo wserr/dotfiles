@@ -21,6 +21,9 @@ vim.keymap.set("n", "tt", ":tabedit | te<CR>")
 -- Spawn docker compose down -v
 vim.keymap.set("n", "tdv", ":tabedit | te docker compose down -v<CR>")
 
+-- Spawn ChatGPT window
+vim.keymap.set("n", "<leader>C", ":ChatGPT<CR>")
+
 -- Resize current split
 vim.keymap.set("n", "<leader>wi", ":vertical res +10<CR>")
 vim.keymap.set("n", "<leader>wd", ":vertical res -10<CR>")
@@ -48,3 +51,10 @@ vim.keymap.set("n", "<leader>tc", ":NvimTreeCollapse<CR>")
 -- Formatter
 vim.keymap.set("n", "<leader>f", ":Format<CR>")
 vim.keymap.set("n", "<leader>F", ":FormatWrite<CR>")
+
+-- JSON formatter
+vim.keymap.set("n", "<leader>js", ":%!jq '.'<CR>")
+
+
+-- Aerial
+vim.keymap.set("n", "<leader>at", ":AerialToggle<CR>")
