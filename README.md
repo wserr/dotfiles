@@ -2,14 +2,19 @@
 
 Dotfiles for my current linux workstation.
 
+## Distro
+
+I'm running these dotfiles on ubuntu 22.04
+
 ## Version Table
 
-| Package Name | Version            |
-| ------------ | ------------------ |
-| Neovim       | 0.8.3              |
-| i3           | 4.21.1-2-g59cdfc0f |
-| rofi         | 1.7.1              |
-| polybar      | 3.5.7              |
+| Package Name                              | Version            |
+| ----------------------------------------- | ------------------ |
+| Neovim                                    | 0.10.0-dev         |
+| i3                                        | 4.21.1-2-g59cdfc0f |
+| rofi                                      | 1.7.1              |
+| polybar                                   | 3.5.7              |
+| [tmux](https://github.com/tmux/tmux/wiki) | 3.3a               |
 
 ## Current Layout
 
@@ -18,4 +23,3 @@ Dotfiles for my current linux workstation.
 ## Use configuration files in this repo
 
 Run `sync_config_with_repo.sh` script to automatically put configuration in the correct system folders.
-
