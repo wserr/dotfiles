@@ -18,7 +18,18 @@ return require("packer").startup(function(use)
 		-- or                            , branch = '0.1.x',
 		requires = { { "nvim-lua/plenary.nvim" } },
 	})
-	use("nvim-pack/nvim-spectre")
+	use({
+		"nvim-pack/nvim-spectre",
+		config = function()
+			require("spectre").setup({
+				default = {
+					replace = {
+						cmd = "oxi",
+					},
+				},
+			})
+		end,
+	})
 	use({
 		"stevearc/aerial.nvim",
 		config = function()
@@ -37,6 +48,7 @@ return require("packer").startup(function(use)
 	use("theprimeagen/harpoon")
 	use("mbbill/undotree")
 	use("tpope/vim-fugitive")
+	use("tpope/vim-unimpaired")
 	use({
 		"VonHeikemen/lsp-zero.nvim",
 		requires = {
@@ -84,7 +96,6 @@ return require("packer").startup(function(use)
 		end,
 		ft = { "markdown" },
 	})
-	use("ekickx/clipboard-image.nvim")
 	use("nanozuki/tabby.nvim")
 	use({
 		"XadillaX/json-formatter.vim",
@@ -103,4 +114,5 @@ return require("packer").startup(function(use)
 		"folke/trouble.nvim",
 		requires = "nvim-tree/nvim-web-devicons",
 	})
+	use("postfen/clipboard-image.nvim")
 end)

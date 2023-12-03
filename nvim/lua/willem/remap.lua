@@ -21,9 +21,6 @@ vim.keymap.set("n", "tt", ":tabedit | te<CR>")
 -- Spawn docker compose down -v
 vim.keymap.set("n", "tdv", ":tabedit | te docker compose down -v<CR>")
 
--- Spawn ChatGPT window
-vim.keymap.set("n", "<leader>C", ":ChatGPT<CR>")
-
 -- Resize current split
 vim.keymap.set("n", "<leader>wi", ":vertical res +10<CR>")
 vim.keymap.set("n", "<leader>wd", ":vertical res -10<CR>")

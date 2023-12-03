@@ -11,7 +11,7 @@ local function prompt()
 	local numbered_choices = {}
 
 	local index = 1
-	for el in pairs(Choices) do
+	for _, el in pairs(Choices) do
 		table.insert(numbered_choices, index .. ". " .. el)
 		index = index + 1
 	end
