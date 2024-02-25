@@ -4,5 +4,3 @@ require("trouble").setup({
 	-- refer to the configuration section below
 	auto_preview = false, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
 })
-
-vim.keymap.set("n", "<leader>T", ":TroubleToggle <CR>")
