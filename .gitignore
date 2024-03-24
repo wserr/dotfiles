@@ -1,5 +1,14 @@
 **/packer_compiled.lua
+evolution
 lazy-lock.json
 nextjs-nodejs/**
 pulse/**
 .mono/**
+user-dirs.*
+mimeapps.list
+.gsd-keyboard.settings-ported
+ibus/
+dconf/
+update-notifier/
+nautilus/
+gtk-3.0/
