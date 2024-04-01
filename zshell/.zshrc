@@ -58,3 +58,5 @@ alias docs="cd ~/repos/documentation && vim ."
 # export DOTNET_ROOT=$HOME/dotnet
 export PATH=$PATH:$HOME/.dotnet
 # export DOCKER_CONFIG=$HOME/.docker
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
