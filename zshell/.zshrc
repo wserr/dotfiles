@@ -56,5 +56,5 @@ alias docs="cd ~/repos/documentation && vim ."
 # alias sgrebackend="cd ~/repos/sgre-as-backend-services && vim ."
 
 # export DOTNET_ROOT=$HOME/dotnet
-# export PATH=$PATH:$HOME/dotnet
+export PATH=$PATH:$HOME/.dotnet
 # export DOCKER_CONFIG=$HOME/.docker

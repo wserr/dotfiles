@@ -12,3 +12,14 @@ dconf/
 update-notifier/
 nautilus/
 gtk-3.0/
+
+zshell/**
+!zshell/.zshrc
+
+.gsd-keyboard.settings-ported
+.zcompdump
+mimeapps.list
+pavucontrol.ini
+
+autostart
+JetBrains

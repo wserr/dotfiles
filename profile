@@ -1,4 +1,4 @@
-# /etc/profile
+t /etc/profile
 
 # Append "$1" to $PATH when not already in.
 # This function API is accessible to scripts in /etc/profile.d
@@ -13,6 +13,9 @@ append_path () {
 
 # Home folder for config
 export XDG_CONFIG_HOME='/home/willem/system_repos/dotfiles'
+
+# Change to name of main disk
+export MAIN_DISK_NAME='sda3'
 
 # Append our default paths
 append_path '/home/willem/system_repos/dotfiles/scripts'
