@@ -1,5 +1,3 @@
-t /etc/profile
-
 # Append "$1" to $PATH when not already in.
 # This function API is accessible to scripts in /etc/profile.d
 append_path () {
@@ -13,9 +11,12 @@ append_path () {
 
 # Home folder for config
 export XDG_CONFIG_HOME='/home/willem/system_repos/dotfiles'
+export XDG_DATA_HOME='/home/willem/system_repos/dotfiles'
+export ZDOTDIR='/home/willem/system_repos/dotfiles/zshell'
 
-# Change to name of main disk
-export MAIN_DISK_NAME='sda3'
+
+# Change to name of main disk - to show disk usage in dwmblocks
+export DISK_NAME=rpool\/USERDATA\/willem_g5fpb0
 
 # Append our default paths
 append_path '/home/willem/system_repos/dotfiles/scripts'

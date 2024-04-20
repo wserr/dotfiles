@@ -24,3 +24,5 @@ pavucontrol.ini
 autostart
 JetBrains
 google-chrome
+
+nvim/lazy
