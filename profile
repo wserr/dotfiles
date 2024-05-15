@@ -24,6 +24,8 @@ append_path '/usr/local/sbin'
 append_path '/usr/local/bin'
 append_path '/usr/bin'
 append_path '/home/willem/.dotnet/tools'
+append_path '/home/willem/.dotnet'
+append_path '/home/willem/system_repos/dotfiles/JetBrains/Toolbox/scripts'
 
 # Force PATH to be environment
 export PATH

@@ -26,3 +26,21 @@ JetBrains
 google-chrome
 
 nvim/lazy
+
+IsolatedStorage/
+NuGet/
+SymbolSourceSymbols/
+dwm/autostart_blocking.sh
+flameshot/
+gnome-settings-daemon/
+gnome-shell/
+gvfs-metadata/
+htop/
+icc/
+lesshst
+nvim/telescope_history
+nvm/
+powershell/
+recently-used.xbel
+scripts/xrandr/
+session_migration-ubuntu
