@@ -13,6 +13,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("modules.lazy")
+require("modules.chatgpt")
 require("modules.nvim-tree")
 require("modules.lspzero")
 require("modules.trouble")

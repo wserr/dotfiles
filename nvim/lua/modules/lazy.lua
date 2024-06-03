@@ -49,5 +49,15 @@ require("lazy").setup({
 			"antoinemadec/FixCursorHold.nvim",
 			"nvim-treesitter/nvim-treesitter"
 		}
+	},
+	{
+		"jackMort/ChatGPT.nvim",
+		event = "VeryLazy",
+		dependencies = {
+			"MunifTanjim/nui.nvim",
+			"nvim-lua/plenary.nvim",
+			"folke/trouble.nvim",
+			"nvim-telescope/telescope.nvim"
+		}
 	}
 })
