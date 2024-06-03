@@ -15,7 +15,7 @@ export XDG_DATA_HOME='/home/willem/system_repos/dotfiles'
 export ZDOTDIR='/home/willem/system_repos/dotfiles/zshell'
 
 
-# Change to name of main disk - to show disk usage in dwmblocks
+# Change to name of main disk
 export DISK_NAME=rpool\/USERDATA\/willem_g5fpb0
 
 # Append our default paths
@@ -23,8 +23,6 @@ append_path '/home/willem/system_repos/dotfiles/scripts'
 append_path '/usr/local/sbin'
 append_path '/usr/local/bin'
 append_path '/usr/bin'
-append_path '/home/willem/.dotnet/tools'
-append_path '/home/willem/.dotnet'
 append_path '/home/willem/system_repos/dotfiles/JetBrains/Toolbox/scripts'
 
 # Force PATH to be environment
