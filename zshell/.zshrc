@@ -5,6 +5,7 @@ export OPENAI_API_TYPE="azure"
 export OPENAI_API_BASE="https://test-apim-eastus2.azure-api.net/openai-test/"
 export OPENAI_API_AZURE_ENGINE="gpt-4"
 export OPENAI_API_AZURE_VERSION="2024-02-15-preview"
+export OPENAI_API_KEY="8130bb9a0b73466ab2c4e03d4c8e5901"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -42,6 +43,8 @@ alias k="kubectl"
 
 alias docs="cd ~/repos/documentation && vim ."
 
+alias term="nvim --cmd :terminal"
+
 # Proceedix specific aliases
 # alias wiki="cd ~/repos/Proceedix%20General.wiki/ && vim ."
 # 
@@ -61,8 +64,3 @@ alias docs="cd ~/repos/documentation && vim ."
 # export DOCKER_CONFIG=$HOME/.docker
 #
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-
-if [ -z "$NVIM" ]; then
-		  nvim --cmd :terminal 
-fi

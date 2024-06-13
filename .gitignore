@@ -2,6 +2,7 @@ autostart
 Code/
 dconf/
 dwm/autostart_blocking.sh
+eog/**
 evolution
 flameshot/
 gnome-session/
@@ -36,11 +37,12 @@ pavucontrol.ini
 powershell/
 pulse/
 pulse/**
+QtProject.conf
 Raspberry Pi/
 recently-used.xbel
 RefSrcSymbols/
 reqable/
-scripts/xrandr/
+!scripts/xrandr/
 session_migration-ubuntu
 sounds/
 Symbols/

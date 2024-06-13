@@ -1,0 +1,5 @@
+SESSION_NAME="nvimconfig";
+tmux attach-session -t "$SESSION_NAME" || \
+		  (tmux new-session -d -s "$SESSION_NAME" \
+		  -n nvimconfig "cd ~/system_repos/dotfiles/nvim/ && nvim" && \
+		  tmux -2 attach-session -d)

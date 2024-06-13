@@ -1,9 +1,12 @@
 require("lazy").setup({
-	"nvim-tree/nvim-web-devicons",
+	{
+		"nvim-tree/nvim-web-devicons",
+		lazy = true
+	},
 	{
 		"nvim-tree/nvim-tree.lua",
 		version = "*",
-		lazy = false,
+		lazy = true,
 		dependencies = {
 			"nvim-tree/nvim-web-devicons",
 		},
@@ -11,27 +14,29 @@ require("lazy").setup({
 			require("nvim-tree").setup({})
 		end,
 	},
-	"mhartington/formatter.nvim",
+	{ "mhartington/formatter.nvim", lazy = true },
 	{
 		"tpope/vim-fugitive",
 		lazy = false
 	},
 	{
 		"nvim-telescope/telescope.nvim",
+		lazy = true,
 		tag = "0.1.5",
 		dependencies = { "nvim-lua/plenary.nvim" }
 	},
-	"nvim-lua/plenary.nvim",
+	{ "nvim-lua/plenary.nvim",      lazy = true },
 	{
 		"VonHeikemen/lsp-zero.nvim",
 		branch = "v3.x"
 	},
-	"neovim/nvim-lspconfig",
-	"hrsh7th/cmp-nvim-lsp",
-	"hrsh7th/nvim-cmp",
-	"L3MON4D3/LuaSnip",
+	{ "neovim/nvim-lspconfig", lazy = true },
+	{ "hrsh7th/cmp-nvim-lsp",  lazy = true },
+	{ "hrsh7th/nvim-cmp",      lazy = true },
+	{ "L3MON4D3/LuaSnip",      lazy = true },
 	{
 		"folke/trouble.nvim",
+		lazy = true,
 		dependencies = {
 			"nvim-tree/nvim-web-devicons",
 		}
@@ -39,25 +44,36 @@ require("lazy").setup({
 	{
 		"iamcco/markdown-preview.nvim",
 		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+		lazy = true,
 		ft = { "markdown" },
 		build = function() vim.fn["mkdp#util#install"]() end,
 	},
 	{
-		"nvim-neotest/neotest",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"antoinemadec/FixCursorHold.nvim",
-			"nvim-treesitter/nvim-treesitter"
-		}
-	},
-	{
 		"jackMort/ChatGPT.nvim",
+		lazy = true,
 		event = "VeryLazy",
+		init = function()
+			local config = {
+				actions_paths = { os.getenv("XDG_CONFIG_HOME") .. "/nvim/actions.json" },
+			}
+			require("chatgpt").setup(config)
+		end,
 		dependencies = {
 			"MunifTanjim/nui.nvim",
 			"nvim-lua/plenary.nvim",
 			"folke/trouble.nvim",
 			"nvim-telescope/telescope.nvim"
 		}
+	},
+	{
+		"folke/tokyonight.nvim",
+		lazy = false,
+		priority = 1000,
+		opts = {},
+	},
+	{
+		'stevearc/overseer.nvim',
+		lazy = true,
+		opts = {},
 	}
 })
