@@ -20,6 +20,8 @@ export DISK_NAME=rpool\/USERDATA\/willem_g5fpb0
 
 # Append our default paths
 append_path '/home/willem/system_repos/dotfiles/scripts'
+append_path '/home/willem/system_repos/dotfiles/scripts/xrandr'
+append_path '/home/willem/system_repos/dotfiles/scripts/development'
 append_path '/usr/local/sbin'
 append_path '/usr/local/bin'
 append_path '/usr/bin'
