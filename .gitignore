@@ -52,3 +52,12 @@ user-dirs.*
 .zcompdump
 zshell/**
 !zshell/.zshrc
+
+tool_state
+virtualenv/
+microsoft-edge/
+com.example.px_flutter/
+Cypress/
+enchant/
+gedit/
+flatpak/
