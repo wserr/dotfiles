@@ -1,12 +1,11 @@
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+ZSH_THEME="junkfood"
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
@@ -24,7 +23,7 @@ HIST_STAMPS="mm/dd/yyyy"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git nvm zsh-interactive-cd zsh-autosuggestions docker-compose colorize)
+plugins=(git nvm zsh-interactive-cd zsh-autosuggestions docker colorize colored-man-pages)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -55,7 +54,7 @@ alias term="nvim --cmd :terminal"
 # alias sgrebackend="cd ~/repos/sgre-as-backend-services && vim ."
 
 # export DOTNET_ROOT=$HOME/dotnet
-# export PATH=$PATH:$HOME/.dotnet
 # export DOCKER_CONFIG=$HOME/.docker
 #
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export PATH=$PATH:/home/willem/.local/lib/python3.10/site-packages
