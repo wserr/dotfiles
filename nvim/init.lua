@@ -40,3 +40,5 @@ require("nvim-lspconfig.rust")
 require("nvim-lspconfig.tsserver")
 
 require("settings")
+
+require("functions.temp_file")
