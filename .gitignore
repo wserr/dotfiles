@@ -62,3 +62,13 @@ virtualenv/
 .zcompdump
 zshell/**
 !zshell/.zshrc
+Signal/
+azuredatastudio/
+bottom/
+chromium/
+cosmic/
+github-copilot/
+inkscape/
+neovide/
+nvim/.netrwhist
+sqlops/

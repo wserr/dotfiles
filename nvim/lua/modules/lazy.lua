@@ -1,5 +1,33 @@
 require("lazy").setup({
 	{
+		"yetone/avante.nvim",
+		event = "VeryLazy",
+		lazy = false,
+		version = false, -- set this if you want to always pull the latest change
+		opts = {
+			-- add any opts here
+		},
+		-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+		build = "make",
+		-- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+			"stevearc/dressing.nvim",
+			"nvim-lua/plenary.nvim",
+			"MunifTanjim/nui.nvim",
+			--- The below dependencies are optional,
+			"nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+		},
+		{
+			-- Make sure to set this up properly if you have lazy=true
+			'MeanderingProgrammer/render-markdown.nvim',
+			opts = {
+				file_types = { "markdown", "Avante" },
+			},
+			ft = { "markdown", "Avante" },
+		},
+	},
+	{
 		"nvim-tree/nvim-web-devicons",
 		lazy = true
 	},
@@ -81,23 +109,6 @@ require("lazy").setup({
 		lazy = true,
 		ft = { "markdown" },
 		build = function() vim.fn["mkdp#util#install"]() end,
-	},
-	{
-		"jackMort/ChatGPT.nvim",
-		lazy = true,
-		event = "VeryLazy",
-		init = function()
-			local config = {
-				actions_paths = { os.getenv("XDG_CONFIG_HOME") .. "/nvim/actions.json" },
-			}
-			require("chatgpt").setup(config)
-		end,
-		dependencies = {
-			"MunifTanjim/nui.nvim",
-			"nvim-lua/plenary.nvim",
-			"folke/trouble.nvim",
-			"nvim-telescope/telescope.nvim"
-		}
 	},
 	{
 		"folke/tokyonight.nvim",
