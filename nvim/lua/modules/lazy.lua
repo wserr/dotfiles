@@ -11,6 +11,7 @@ require("lazy").setup({
 		build = "make",
 		-- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
 		dependencies = {
+			"MunifTanjim/nui.nvim",
 			"nvim-treesitter/nvim-treesitter",
 			"stevearc/dressing.nvim",
 			"nvim-lua/plenary.nvim",
@@ -26,6 +27,10 @@ require("lazy").setup({
 			},
 			ft = { "markdown", "Avante" },
 		},
+	},
+	{
+		"MunifTanjim/nui.nvim",
+		lazy = true
 	},
 	{
 		"nvim-tree/nvim-web-devicons",
