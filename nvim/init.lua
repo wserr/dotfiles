@@ -20,7 +20,7 @@ require("modules.lspzero")
 require("modules.overseer")
 require("modules.trouble")
 require("modules.formatter")
-require("modules.autocommands")
+require("modules.terraformls")
 
 require("keymaps.terminal")
 require("keymaps.fugitive")

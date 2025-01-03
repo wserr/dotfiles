@@ -59,3 +59,7 @@ alias term="nvim --cmd :terminal"
 # export DOCKER_CONFIG=$HOME/.docker
 #
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
