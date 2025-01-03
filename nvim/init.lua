@@ -13,7 +13,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("modules.lazy")
-require("modules.chatgpt")
+require("modules.avante")
 require("modules.nvim-tree")
 require("modules.colorscheme")
 require("modules.lspzero")
@@ -39,5 +39,8 @@ require("nvim-lspconfig.docker")
 require("nvim-lspconfig.marksman")
 require("nvim-lspconfig.rust")
 require("nvim-lspconfig.tsserver")
+require("nvim-lspconfig.terraform")
 
 require("settings")
+
+require("functions.temp_file")
