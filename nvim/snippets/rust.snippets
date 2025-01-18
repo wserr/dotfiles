@@ -8,14 +8,3 @@ snippet testmodule
 			!todo()
 		}
 	}
-
-snippet instrument
-		  #[instrument(skip(${1:var}), fields(${2:var}))]
-
-snippet spanstart
-        let ${1:var} = span!(
-            tracing::Level::INFO,
-            "${2:name}",
-            "${3:tag}" = ${4:expression}
-        );
-        let _ = $1.enter();

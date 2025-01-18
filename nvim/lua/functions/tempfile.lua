@@ -20,16 +20,14 @@ local function prompt()
 end
 
 -- Opens a temp file with extension that you can choose
--- Temp file is saved in current working directory
+-- Temp file is saved in tmp folder
 function OpenTempFile()
 	local result = prompt()
 	local choice = Choices[result]
-	local file_name = os.date("%Y%m%d_%H%M%S") .. "_test." .. choice
+	local file_name = "/tmp/" .. os.date("%Y%m%d_%H%M%S") .. "." .. choice
 	local file = io.open(file_name, "w")
 	if file ~= nil then
 		file:close()
 	end
 	vim.cmd("vsplit " .. file_name)
 end
-
-vim.keymap.set("n", "temp", ":lua OpenTempFile()<CR>")

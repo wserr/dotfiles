@@ -1,0 +1,14 @@
+snippet var
+  variable "${1:name}" {
+     type        = string
+     description = "${2:desc}"
+	  default 	  = ""
+  }
+
+snippet output
+  output "${1:name}" {
+    value     = ${2:value}
+    sensitive = ${3:false}
+  }
+
+
