@@ -1,3 +1,25 @@
+snippet azurerm_resource_group
+  resource "azurerm_resource_group" "${1:name}" {
+    name     = "${2:resource_group_name}"
+    location = "${3:location}"
+  }
+
+snippet azurerm_virtual_network
+  resource "azurerm_virtual_network" "${1:name}" {
+    name                = "${2:vnet_name}"
+    address_space       = ["${3:10.0.0.0/16}"]
+    location            = azurerm_resource_group.${4:resource_group_name}.location
+    resource_group_name = azurerm_resource_group.${4:resource_group_name}.name
+  }
+
+snippet azurerm_storage_account
+  resource "azurerm_storage_account" "${1:name}" {
+    name                     = "${2:storage_account_name}"
+    resource_group_name      = azurerm_resource_group.${3:resource_group_name}.name
+    location                 = azurerm_resource_group.${3:resource_group_name}.location
+    account_tier             = "${4:Standard}"
+    account_replication_type = "${5:LRS}"
+  }
 snippet var
   variable "${1:name}" {
      type        = string

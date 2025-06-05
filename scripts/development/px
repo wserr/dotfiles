@@ -1,6 +1,0 @@
-SESSION_NAME="api-v3";
-tmux attach-session -t "$SESSION_NAME" || \
-		  (tmux new-session -d -s "$SESSION_NAME" \
-		  -n portal "cd ~/repos/service-admin-portal/ && nvim --cmd :terminal" && \
-		  tmux new-window -n backend "cd ~/repos/api-v3/ && nvim --cmd :terminal" && \
-		  tmux -2 attach-session -d)
