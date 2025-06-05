@@ -1,6 +1,32 @@
-snippet techspec
-	# This is an example tech spec
+snippet heading
+	# ${1:Heading 1}
 
-	## Heading 1
+snippet subheading
+	## ${1:Heading 2}
 
-	## Heading 2
+
+snippet list
+	- ${1:List item 1}
+	- ${2:List item 2}
+	- ${3:List item 3}
+
+snippet link
+	[${1:link text}](${2:url})
+
+snippet image
+	![${1:alt text}](${2:image_url})
+
+snippet codeblock
+	\`\`\`${1:language}
+	${2:code}
+	\`\`\`
+
+snippet table
+	| ${1:Header 1} | ${2:Header 2} |
+	| ------------- | ------------- |
+	| ${3:Data 1}   | ${4:Data 2}   |
+snippet timeHeading
+		  ## DD-MM-2025
+
+snippet timeRecord
+		  - HHuMM - HHuMM: <DESCRIPTION>
