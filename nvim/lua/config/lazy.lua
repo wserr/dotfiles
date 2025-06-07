@@ -39,6 +39,8 @@ vim.opt.rtp:prepend(lazypath)
 vim.filetype.add({
     extension = {
         mdx = "markdown",
+	unit = "systemd",
+	timer = "systemd"
     },
 })
 vim.filetype.add({

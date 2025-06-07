@@ -22,6 +22,12 @@ This setup is applicable to debian and ubuntu
 sudo apt install git nodejs
 ```
 
+### Node Installation
+
+Install node via nvm
+
+See: https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating
+
 ### Zshell installation
 
 - Install zsh

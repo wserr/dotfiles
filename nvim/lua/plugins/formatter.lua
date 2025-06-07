@@ -57,6 +57,9 @@ return {
                     typescriptreact = {
                         require("formatter.filetypes.typescriptreact").prettier,
                     },
+                    yaml = {
+                        require("formatter.filetypes.yaml").prettier,
+                    },
 
                     -- Use the special "*" filetype for defining formatter configurations on
                     -- any filetype
