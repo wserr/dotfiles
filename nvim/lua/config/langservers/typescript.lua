@@ -1,11 +1,8 @@
-local nvim_lsp = require('lspconfig')
-nvim_lsp.denols.setup {
+vim.lsp.config["denols"] = {
   on_attach = on_attach,
-  root_dir = nvim_lsp.util.root_pattern("deno.json", "deno.jsonc"),
 }
 
-nvim_lsp.ts_ls.setup {
+vim.lsp.config["ts_ls"] = {
   on_attach = on_attach,
-  root_dir = nvim_lsp.util.root_pattern("package.json"),
   single_file_support = false
 }

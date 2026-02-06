@@ -1,0 +1,52 @@
+snippet dotnetBuild
+	FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+	WORKDIR /src
+
+	RUN dotnet tool install --global dotnet-ef
+	
+	# copy csproj and restore as distinct layers
+	COPY ${1:NAME}/*.csproj ./${1:NAME}/
+	
+	WORKDIR /src/${1:NAME}
+	RUN dotnet restore
+	
+	WORKDIR /src
+	# copy everything else and build app
+	COPY ${1:NAME}/. ./${1:NAME}/
+	COPY common/. ./common/
+	
+	WORKDIR /src/${1:NAME}
+	RUN dotnet publish -c release -o /app
+
+snippet dotnetReleaseWeb
+	# final stage/image
+	FROM mcr.microsoft.com/dotnet/aspnet:9.0
+	WORKDIR /app
+	COPY --from=build /app ./
+	ENTRYPOINT ["dotnet", "${1:NAME}.dll"]
+
+snippet dotnetReleaseMigrations
+	FROM build AS migration
+	RUN dotnet build
+	ENV PATH="$PATH:/root/.dotnet/tools"
+	ENTRYPOINT ["dotnet-ef", "database", "update"]
+
+snippet dotnetGenerateFromAvro
+	FROM mcr.microsoft.com/dotnet/sdk:9.0-bookworm-slim AS build
+	RUN apt update && apt install -y findutils curl
+	WORKDIR /Generated/
+	
+	RUN dotnet tool install --global Apache.Avro.Tools --version 1.12.0
+	ENV PATH="$PATH:/root/.dotnet/tools"
+	
+	ENTRYPOINT find *avsc -exec avrogen -s {} ./cs \;
+
+snippet javaGenerateAvscFromAvdl
+	FROM openjdk:26-jdk-slim-bookworm
+	RUN apt update && apt install -y findutils curl
+	
+	WORKDIR /home/avro-gen/
+	RUN curl -L -o /avro-tools.jar https://repo1.maven.org/maven2/org/apache/avro/avro-tools/1.12.0/avro-tools-1.12.0.jar
+	
+	ENTRYPOINT rm -r ./Generated/* && find *avdl -exec java -jar /avro-tools.jar idl2schemata ./{} ./Generated \;
+

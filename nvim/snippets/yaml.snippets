@@ -1,11 +1,11 @@
-snippet config
+snippet kubernetesConfig
 	apiVersion: v1
 	kind: ConfigMap
 	metadata:
 	  name: ${1:name}-config
 	data:
 	  test: "test"
-snippet service
+snippet kubernetesService
 	apiVersion: v1
 	kind: Service
 	metadata:
@@ -18,7 +18,7 @@ snippet service
 	  selector:
 	    app: ${2:appname}
 
-snippet deploy
+snippet kubernetesDeploy
 	apiVersion: apps/v1
 	kind: Deployment
 	metadata:
@@ -48,3 +48,123 @@ snippet deploy
 	          envFrom:
 	            - configMapRef:
 	                name: ${4:configmap}
+
+snippet dockerComposeKafkaBase
+	services:
+	  broker-init:
+	    image: confluentinc/cp-kafka:8.0.0
+	    command: [ "/bin/bash", "-c", "/create_topics.sh"] 
+	    depends_on:
+	      broker:
+	        condition: service_healthy
+	    volumes:
+	      - type: bind
+	        source: ./create_topics.sh
+	        target: /create_topics.sh
+	  broker:
+	    image: confluentinc/cp-kafka:8.0.0
+	    environment:
+	      KAFKA_NODE_ID: 1
+	      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+	      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092'
+	      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+	      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+	      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+	      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+	      KAFKA_JMX_PORT: 9101
+	      KAFKA_JMX_HOSTNAME: localhost
+	      KAFKA_PROCESS_ROLES: 'broker,controller'
+	      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@broker:29093'
+	      KAFKA_LISTENERS: 'PLAINTEXT://broker:29092,CONTROLLER://broker:29093,PLAINTEXT_HOST://0.0.0.0:9092'
+	      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+	      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+	      KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+	      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true" 
+	      CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
+	    healthcheck:
+	      test: kafka-topics --bootstrap-server broker:29092 --list
+	      interval: 1s
+	      timeout: 60s
+	      retries: 60
+	  schema-registry:
+	    image: confluentinc/cp-schema-registry:8.0.0
+	    environment:
+	      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+	      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'broker:29092'
+	      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+	    healthcheck:
+	      test: curl --output /dev/null --silent --head --fail http://schema-registry:8081/subjects
+	      interval: 5s
+	      timeout: 10s
+	      retries: 3
+	    depends_on:
+	      broker-init:
+	        	condition: service_completed_successfully
+
+snippet dockerComposePostgres
+	services:
+	  postgres:
+	    image: postgres:17
+	    environment:
+	      POSTGRES_PASSWORD: postgres
+
+snippet dockerComposeDotnetWeb
+	services:
+  	  consumer:
+  	    build:
+  	      context: .
+  	      dockerfile: ./Dockerfiles/consumer.Dockerfile
+
+snippet dockerComposeAvroSchemas
+	services:
+	  avsc-generator:
+	    network_mode: none
+	    build:
+	      context: ./Dockerfiles
+	      dockerfile: AvscGenerator.Dockerfile
+	    volumes:
+	      - ./kafka.contracts/Definitions:/home/avro-gen/:r
+	      - ./kafka.contracts/Definitions/Generated:/home/avro-gen/Generated:rw
+	  avrogen:
+	    network_mode: none
+	    build:
+	      context: ./Dockerfiles
+	      dockerfile: Avrogen.Dockerfile
+	    volumes:
+	      - ./kafka.contracts/Definitions/Generated/:/Generated/:rw
+	    depends_on:
+	      avsc-generator:
+	        condition: service_completed_successfully
+
+snippet acIacTopic
+	apiVersion: eda.atlascopco.com/v1
+	kind: Topic
+	metadata:
+	  environment: ${1:Environment}
+	  name: ${2:Prefix}.${3:AppName}.${4:Visibility}.${5:Subject}
+	  visibility: ${4:Visibility}
+	  owner: test@atlascopco.com
+	  applicationDeploymentRef: ${2:Prefix}.${3:AppName}
+	spec:
+	  partitions: 2
+	  config:
+	    retention.ms: 604800000
+
+snippet acIacAcl
+	apiVersion: eda.atlascopco.com/v1
+	kind: TopicPermission
+	spec: 
+	  topic: ${1:AppName}.${2:Visibility}.${3:Subject}
+	  grantedApplicationDeploymentRef: ${4:Prefix}.${5:TargetApp}
+	  permissionType: READ
+
+snippet acIacServiceAccount
+	apiVersion: eda.atlascopco.com/v1
+	kind: ServiceAccount
+	metadata:
+	  environment: ${1:Environment}
+	  applicationDeploymentRef: ${2:Prefix}.${3:AppName}
+	spec:
+	  displayName: ${2:Prefix}.${4:AppName}-${1:Environment}-${5:Suffix}
+
+

@@ -1,0 +1,862 @@
+# Region EFCore
+snippet efcoreContext
+	internal class ${1:NAME}Context(DbContextOptions<${1:NAME}Context> options) : DbContext(options)
+	{
+	    public DbSet<${1:NAME}> ${1:NAME}s { get; set; }
+	}
+
+snippet efcoreInjection
+	builder.Services.AddDbContext<${1:NAME}Context>(
+	    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")),
+	    ServiceLifetime.Singleton
+	);
+
+# Region Kafka
+snippet kafkaProducerInit
+	var config = new ProducerConfig
+	{
+	  BootstrapServers = "localhost:9092",
+	  MessageSendMaxRetries = 10,
+	};
+
+	var schemaRegistry = new CachedSchemaRegistryClient(
+	  new SchemaRegistryConfig { Url = options.SchemaRegistryUrl }
+	);
+
+	_producer = new ProducerBuilder<${1:KEY_TYPE}, ${2:VALUE_TYPE}>(config)
+	  .SetValueSerializer(new AvroSerializer<$(2:VALUETYPE)>(schemaRegistry))
+	  .Build();
+
+snippet kafkaConsumerInit
+	// Meant to run inside a worker service
+	// StoppingToken is used in this example
+	var conf = new ConsumerConfig
+	{
+	    GroupId = "test-consumer-group",
+	    BootstrapServers = "localhost:9092",
+	    AutoOffsetReset = AutoOffsetReset.Earliest,
+	    EnableAutoCommit = false,
+	};
+	                                                                                             
+	return Task.Run(
+	    () =>
+	    {
+	        using var c = new ConsumerBuilder<${1:KEY_TYPE}, ${2:VALUE_TYPE}>(conf).Build();
+	        c.Subscribe(${3:TOPIC_NAME});
+	        try
+	        {
+	            while (true)
+	            {
+	                try
+	                {
+	                    var cr = c.Consume(stoppingToken);
+
+			    // TODO add consumer logic
+	                                                                                             
+	                    c.Commit();
+	                }
+	                catch (ConsumeException e)
+	                {
+	                    Console.WriteLine($"Error occured: {e.Error.Reason}");
+	                }
+	            }
+	        }
+	        catch (OperationCanceledException)
+	        {
+	            // Ensure the consumer leaves the group cleanly and final offsets are committed.
+	            c.Close();
+	        }
+	    },
+	    stoppingToken
+	);
+
+snippet kafkaStreamConfig
+	public static class KafkaConfig
+	{
+	    public static StreamConfig GetConfig()
+	    {
+	        var config = new StreamConfig()
+	        {
+	            ApplicationId = "streamiz",
+	            BootstrapServers = "localhost:9092",
+	            AutoOffsetReset = AutoOffsetReset.Latest,
+	            AllowAutoCreateTopics = false,
+	        };
+	        return config;
+	    }
+	}
+
+snippet kafkaStreamApplication
+	var builder = new StreamBuilder();
+	StreamTopology.Configure(builder);
+
+	var t = builder.Build();
+	var stream = new KafkaStream(t, KafkaConfig.GetConfig());
+
+	await stream.StartAsync(stoppingToken);
+
+snippet kafkaStreamTopology
+	public class StreamTopology
+	{
+
+	    public static void Configure(StreamBuilder builder)
+	    {
+	    }
+	}
+
+snippet kafkaStream
+        var weatherStream = builder.Stream(
+            "${1:TOPIC_NAME}",
+            new StringSerDes(),
+            weatherReadingSerDes
+        );
+
+snippet kafkaStreamFilter
+        var temperatureStream = weatherStream.Filter((k, v, c) => v.type == "temperature");
+
+snippet kafkaStreamJoin
+        var joinedStream = temperatureStream.Join<
+            WeatherReading,
+            CombinedReading,
+            JsonSerDes<WeatherReading>,
+            JsonSerDes<CombinedReading>
+        >(
+            humidityStream,
+            (t, h) =>
+                new CombinedReading(
+                ),
+            JoinWindowOptions.Of(10_000),
+            StreamJoinProps.As("")
+        );
+snippet kafkaStreamAggregation
+        temperatureStream
+            .GroupByKey()
+            .WindowedBy(TumblingWindowOptions.Of(20_000, 7_400_000))
+            .Aggregate(
+                () => new Statistic(0, 0),
+                (_, v, c) => new Statistic(c.amount + 1, c.value + v.value),
+                Materialized<string, Statistic, IWindowStore<Bytes, byte[]>>
+                    .Create("")
+                    .With(new StringSerDes(), new JsonSerDes<Statistic>())
+            )
+            .MapValues((k, _) => ()
+            .ToStream()
+            .To<JsonSerDes<Windowed<String>>, JsonSerDes<Statistic>>("OutputStatistics");
+
+snippet patternSingleton
+	class ${1:NAME}
+	{
+	    private static ${1:NAME} instance;
+
+	    // Constructor is private
+	    private ${1:NAME}()
+	    {
+	        Console.WriteLine("${1:NAME} was instantiated");
+	    }
+
+	    // If singleton needs to be shared across threads, use a lock object
+    	    private static readonly object syncLock = new object();
+	    public static ${1:NAME} getInstance()
+	    {
+		lock (syncLock)
+		{
+		    if (instance == null)
+		    {
+		        instance = new ${1:NAME}();
+		    }
+		    return instance;
+		}
+	    }
+
+	    public void Print()
+	    {
+	        // Functionality of the singleton class
+	        Console.WriteLine("Hi, I'm a singleton!");
+	    }
+	}
+snippet patternFactory
+	// Singleton pattern
+	class ${1:NAME}Factory
+	{
+	    private static ${1:NAME}Factory instance;
+
+	    private ${1:NAME}Factory() { }
+
+	    private Dictionary<string, ${1:NAME}> registered${1:NAME}s =
+	        new Dictionary<string, ${1:NAME}>();
+
+	    // Registration pattern
+	    // Can also be done using reflection
+	    public void Register${1:NAME}(string key, ${1:NAME} value)
+	    {
+	        registered${1:NAME}s.Add(key, value);
+	    }
+
+	    public static ${1:NAME}Factory getInstance()
+	    {
+	        if (instance == null)
+	        {
+	            instance = new ${1:NAME}Factory();
+	        }
+	        return instance;
+	    }
+
+	    public ${1:NAME} Create${1:NAME}(string type)
+	    {
+	        return registered${1:NAME}s.GetValueOrDefault(type).create${1:NAME}();
+	    }
+	}
+
+	class Import${1:NAME} : ${1:NAME}
+	{
+	    public static void Register()
+	    {
+	        ${1:NAME}Factory.getInstance().Register${1:NAME}("Import${1:NAME}", new Import${1:NAME}());
+	    }
+
+	    public override ${1:NAME} create${1:NAME}()
+	    {
+	        return new Import${1:NAME}();
+	    }
+	}
+
+	class Export${1:NAME} : ${1:NAME}
+	{
+	    public static void Register()
+	    {
+	        ${1:NAME}Factory.getInstance().Register${1:NAME}("Export${1:NAME}", new Export${1:NAME}());
+	    }
+
+	    public override ${1:NAME} create${1:NAME}()
+	    {
+	        return new Export${1:NAME}();
+	    }
+	}
+
+	abstract class ${1:NAME}
+	{
+	    public abstract ${1:NAME} create${1:NAME}();
+	}
+snippet patternFactoryMethod
+	// Singleton pattern
+	class ${1:NAME}Factory : Factory
+	{
+	    private static ${1:NAME}Factory instance;
+
+	    private ${1:NAME}Factory() { }
+
+	    private Dictionary<string, Func<${1:NAME}>> registered${1:NAME}s =
+	        new Dictionary<string, Func<${1:NAME}>>();
+
+	    // Registration pattern
+	    // Can also be done using reflection
+	    public void Register${1:NAME}(string key, Func<${1:NAME}> value)
+	    {
+	        registered${1:NAME}s.Add(key, value);
+	    }
+
+	    public static ${1:NAME}Factory getInstance()
+	    {
+	        if (instance == null)
+	        {
+	            instance = new ${1:NAME}Factory();
+	        }
+	        return instance;
+	    }
+
+	    public override ${1:NAME} CreateObject(string type)
+	    {
+	        return registered${1:NAME}s.GetValueOrDefault(type)();
+	    }
+	}
+
+	abstract class Factory
+	{
+	    public void anOperation(string type)
+	    {
+	        var entity = CreateObject(type);
+	        Console.WriteLine(entity);
+	    }
+
+	    public abstract ${1:NAME} CreateObject(string type);
+	}
+
+	class Import${1:NAME} : ${1:NAME}, IRegistrable<Import${1:NAME}>
+	{
+	    public override void Print()
+	    {
+	        Console.WriteLine("I am an import bycicle");
+	    }
+
+	    public static void Register(string key, Func<Import${1:NAME}> valueCreator)
+	    {
+	        ${1:NAME}Factory.getInstance().Register${1:NAME}(key, valueCreator);
+	    }
+	}
+
+	class Export${1:NAME} : ${1:NAME}, IRegistrable<Export${1:NAME}>
+	{
+	    public static void Register() { }
+
+	    public override void Print()
+	    {
+	        Console.WriteLine("I am an export bycicle");
+	    }
+
+	    public static void Register(string key, Func<Export${1:NAME}> valueCreator)
+	    {
+	        ${1:NAME}Factory.getInstance().Register${1:NAME}(key, valueCreator);
+	    }
+	}
+
+	interface IRegistrable<T>
+	    where T : ${1:NAME}
+	{
+	    static void Register(string key, Func<T> valueCreator)
+	    {
+	        throw new NotImplementedException();
+	    }
+	}
+
+	abstract class ${1:NAME}
+	{
+	    public abstract void Print();
+	}
+
+snippet patternBuilder
+	class ${1:NAME}
+	{
+	    internal ${1:NAME}()
+	    {
+	        ChassisWelded = false;
+	        Wheels = new List<int>();
+	    }
+
+	    public bool ChassisWelded { get; private set; }
+
+	    public List<int> Wheels { get; private set; }
+
+	    public void WeldChassis()
+	    {
+	        ChassisWelded = true;
+	    }
+
+	    public void AddWheels(List<int> wheels)
+	    {
+	        this.Wheels = wheels;
+	    }
+
+	    public override string ToString()
+	    {
+	        return $"{ChassisWelded} - {String.Join(',', Wheels)}";
+	    }
+	}
+
+	class Concrete${1:NAME}Builder : ${1:NAME}Builder
+	{
+	    public Concrete${1:NAME}Builder()
+	    {
+	        Result = new ${1:NAME}();
+	    }
+
+	    private ${1:NAME} Result { get; init; }
+
+	    public override void AddWheels(int amount)
+	    {
+	        Result.AddWheels(Enumerable.Range(1, amount).ToList());
+	    }
+
+	    public override void WeldChassis()
+	    {
+	        Result.WeldChassis();
+	    }
+
+	    public ${1:NAME} GetResult()
+	    {
+	        return Result;
+	    }
+	}
+
+	class ${1:NAME}Director
+	{
+	    private readonly Concrete${1:NAME}Builder builder;
+
+	    public ${1:NAME}Director(Concrete${1:NAME}Builder builder)
+	    {
+	        ArgumentNullException.ThrowIfNull(builder);
+	        this.builder = builder;
+	    }
+
+	    public ${1:NAME} Create${1:NAME}()
+	    {
+	        builder.AddWheels(4);
+	        builder.WeldChassis();
+
+	        return this.builder.GetResult();
+	    }
+	}
+
+snippet patternPrototype
+	class Maze : IPrototype<Maze>
+	{
+	    private Maze(List<Door> doors)
+	    {
+	        Doors = doors;
+	    }
+
+	    public Maze()
+	    {
+	        Doors = new List<Door>() { new Door("test", 5, 5) };
+	    }
+
+	    public Maze clone()
+	    {
+	        return new Maze(Doors.Select(d => d.clone()).ToList());
+	    }
+
+	    public List<Door> Doors { get; private set; }
+
+	    public override string ToString()
+	    {
+	        List<string> elements = new();
+	        elements.Add("This is a maze...");
+	        Doors.ForEach(d =>
+	        {
+	            elements.Add($"{d.Name} - {d.PositionX} - {d.PositionY}");
+	        });
+		return string.Join('\n', elements);
+	    }
+	}
+
+	class Door : IPrototype<Door>
+	{
+	    public Door(string name, int positionX, int positionY)
+	    {
+	        Name = name;
+	        PositionX = positionX;
+	        PositionY = positionY;
+	    }
+
+	    public string Name { get; }
+	    public int PositionX { get; }
+	    public int PositionY { get; }
+
+	    public Door clone()
+	    {
+	        var random = new Random();
+	        return new Door(Name, random.Next(), random.Next());
+	    }
+	}
+
+	interface IPrototype<T>
+	{
+	    T clone();
+	}
+snippet patternObjectPool
+	InitializePool();
+
+	var tasks = new List<Task>();
+
+	for (var i = 0; i < 10; i++)
+	{
+	    tasks.Add(TestTask(i.ToString()));
+	}
+
+	await Task.WhenAll(tasks);
+
+	Console.WriteLine("Done");
+
+	void InitializePool()
+	{
+	    var pool = ReusablePool.getInstance();
+	    for (var i = 0; i < 1; i++)
+	    {
+	        WorkerReusable.Register();
+	    }
+	}
+
+	async Task TestTask(string taskName)
+	{
+	    var pool = ReusablePool.getInstance();
+	    var reusable = pool.AcquireReusable();
+	    var random = new Random();
+
+	    for (var i = 0; i < 10; i++)
+	    {
+	        Console.WriteLine($"{taskName} - {Thread.CurrentThread.ManagedThreadId} - {i}");
+	        reusable.Print();
+	        Console.WriteLine(String.Empty);
+
+	        await Task.Delay(random.Next(1, 1000));
+	    }
+	    pool.ReleaseReusable(reusable);
+	}
+
+	class ReusablePool
+	{
+	    private static ReusablePool instance;
+
+	    private ReusablePool() { }
+
+	    private record ReusableRecord(bool isInUse, IReusable reusable);
+
+	    private List<ReusableRecord> Reusables = new List<ReusableRecord>();
+
+	    public void RegisterReusablePool(IReusable value)
+	    {
+	        Reusables.Add(new ReusableRecord(false, value));
+	    }
+
+	    private static readonly object getInstanceSyncLock = new object();
+
+	    public static ReusablePool getInstance()
+	    {
+	        lock (getInstanceSyncLock)
+	        {
+	            if (instance == null)
+	            {
+	                instance = new ReusablePool();
+	            }
+	            return instance;
+	        }
+	    }
+
+	    private static readonly object acquireSyncLock = new object();
+
+	    public IReusable AcquireReusable()
+	    {
+	        lock (acquireSyncLock)
+	        {
+	            var reusable = Reusables.First(d => d.isInUse == false);
+	            Reusables.Remove(reusable);
+	            reusable = reusable with { isInUse = true };
+	            Reusables.Add(reusable);
+	            return reusable.reusable;
+	        }
+	    }
+
+	    public void ReleaseReusable(IReusable reusable)
+	    {
+	        var reusableToRelease = Reusables.Single(d => d.reusable.Equals(reusable));
+	        if (reusableToRelease.isInUse == false)
+	        {
+	            // Should never happen
+	            throw new InvalidOperationException("Reusable was not in use...");
+	        }
+	        Reusables.Remove(reusableToRelease);
+	        reusableToRelease = reusableToRelease with { isInUse = false };
+	        Reusables.Add(reusableToRelease);
+	    }
+	}
+
+	class WorkerReusable : IReusable
+	{
+	    public static void Register()
+	    {
+	        ReusablePool.getInstance().RegisterReusablePool(new WorkerReusable());
+	    }
+
+	    public void Print()
+	    {
+	        Console.WriteLine("I'm a reusable...");
+	    }
+	}
+
+	interface IReusable
+	{
+	    void Print();
+	}
+snippet patternChainOfResponsibility
+	record Request(int Value);
+
+	abstract class Handler
+	{
+	    protected Handler Successor;
+
+	    public void SetSuccessor(Handler successor)
+	    {
+	        Successor = successor;
+	    }
+
+	    public abstract bool HandleRequestImpl(Request request);
+
+	    public void HandleRequest(Request request)
+	    {
+	        var handledByThisNode = HandleRequestImpl(request);
+
+	        if (Successor != null && !handledByThisNode)
+	        {
+	            Successor.HandleRequest(request);
+	        }
+
+		// For testing purposes
+	        if (handledByThisNode)
+	        {
+	            Console.WriteLine(GetType());
+	        }
+	    }
+	}
+
+	class NegativeValueHandler : Handler
+	{
+	    public override bool HandleRequestImpl(Request request)
+	    {
+	        return request.Value < 0;
+	    }
+	}
+
+	class PositiveValueHandler : Handler
+	{
+	    public override bool HandleRequestImpl(Request request)
+	    {
+	        return request.Value > 0;
+	    }
+	}
+
+	class ZeroValueHandler : Handler
+	{
+	    public override bool HandleRequestImpl(Request request)
+	    {
+	        return request.Value == 0;
+	    }
+	}
+snippet patternInterpreter
+	string roman = "MCMXXVIII";
+	Context context = new Context(roman);
+
+	// Build the 'parse tree'
+	var tree = new List<Expression>();
+	tree.Add(new ThousandExpression());
+	tree.Add(new HundredExpression());
+	tree.Add(new TenExpression());
+	tree.Add(new OneExpression());
+
+	foreach (var element in tree)
+	{
+	    element.interpret(context);
+	}
+
+	Console.WriteLine(context.getOutput());
+
+	class Context
+	{
+	    private string input;
+	    private int output;
+
+	    public Context(String input)
+	    {
+	        this.input = input;
+	    }
+
+	    public string getInput() => input;
+
+	    public void setInput(string input) => this.input = input;
+
+	    public int getOutput() => output;
+
+	    public void setOutput(int output) => this.output = output;
+	}
+
+	abstract class Expression
+	{
+	    public void interpret(Context context)
+	    {
+	        if (context.getInput().Length == 0)
+	        {
+	            return;
+	        }
+
+	        if (context.getInput().StartsWith(nine()))
+	        {
+	            context.setOutput(context.getOutput() + (9 * multiplier()));
+	            context.setInput(context.getInput().Substring(2));
+	        }
+	        if (context.getInput().StartsWith(four()))
+	        {
+	            context.setOutput(context.getOutput() + (4 * multiplier()));
+	            context.setInput(context.getInput().Substring(2));
+	        }
+	        if (context.getInput().StartsWith(five()))
+	        {
+	            context.setOutput(context.getOutput() + (5 * multiplier()));
+	            context.setInput(context.getInput().Substring(1));
+	        }
+	        while (context.getInput().StartsWith(one()))
+	        {
+	            context.setOutput(context.getOutput() + (1 * multiplier()));
+	            context.setInput(context.getInput().Substring(1));
+	        }
+	    }
+
+	    public abstract string one();
+	    public abstract string four();
+	    public abstract string five();
+	    public abstract string nine();
+	    public abstract int multiplier();
+	}
+
+	class ThousandExpression : Expression
+	{
+	    public override string one() => "M";
+
+	    public override string four() => " ";
+
+	    public override string five() => " ";
+
+	    public override string nine() => " ";
+
+	    public override int multiplier() => 1000;
+	}
+
+	class HundredExpression : Expression
+	{
+	    public override string one() => "C";
+
+	    public override string four() => "CD";
+
+	    public override string five() => "D";
+
+	    public override string nine() => "CM";
+
+	    public override int multiplier() => 100;
+	}
+
+	class TenExpression : Expression
+	{
+	    public override string one() => "X";
+
+	    public override string four() => "XL";
+
+	    public override string five() => "L";
+
+	    public override string nine() => "XC";
+
+	    public override int multiplier() => 10;
+	}
+
+	class OneExpression : Expression
+	{
+	    public override string one() => "I";
+
+	    public override string four() => "IV";
+
+	    public override string five() => "V";
+
+	    public override string nine() => "IX";
+
+	    public override int multiplier() => 1;
+	}
+snippet patternMediator
+	class Mediator
+	{
+	    public delegate void MessagePublishedEventHandler(
+	        Colleague sender,
+	        MessagePublishedEventArgs args
+	    );
+	
+	    public event MessagePublishedEventHandler? MessagePublished;
+	
+	    public Mediator() { }
+	
+	    public void Send(Colleague me, string message)
+	    {
+	        MessagePublished?.Invoke(me, new MessagePublishedEventArgs(message));
+	    }
+	}
+	
+	class Colleague : IDisposable
+	{
+	    private readonly Mediator mediator;
+	
+	    public string Name { get; }
+	
+	    public Colleague(string name, Mediator mediator)
+	    {
+	        Name = name;
+	        this.mediator = mediator;
+	        mediator.MessagePublished += OnReceive;
+	    }
+	
+	    public void SendMessage(string message)
+	    {
+	        mediator.Send(this, message);
+	    }
+	
+	    public void Dispose()
+	    {
+	        mediator.MessagePublished -= OnReceive;
+	        Console.WriteLine($"{this.Name} has disconnected from the mediator");
+	    }
+	
+	    private void OnReceive(Colleague sender, MessagePublishedEventArgs args)
+	    {
+	        // Make sure this method catches events, so other Colleagues that are subscribed still get this event
+	        try
+	        {
+	            if (this.Name == "Wout")
+	            {
+	                throw new ArgumentException("test");
+	            }
+	            if (sender.Name != this.Name)
+	            {
+	                Console.WriteLine($"{Name} - Message received from {sender.Name}: {args.message}");
+	            }
+	        }
+	        catch (Exception e)
+	        {
+	            Console.WriteLine(e);
+	        }
+	    }
+	}
+snippet patternObserver
+	abstract class Observable
+	{
+	    // Abstract implementation
+	    // Responsible for notifying observers
+	    private List<Observer> observers = new List<Observer>();
+	
+	    public void Attach(Observer observer)
+	    {
+	        observers.Add(observer);
+	    }
+	
+	    public void Detach(Observer observer)
+	    {
+	        observers.Remove(observer);
+	    }
+	
+	    public void Notify(int newValue)
+	    {
+	        foreach (var observer in observers)
+	        {
+	            observer.Update(newValue);
+	        }
+	    }
+	}
+	
+	class ConcreteObservable : Observable
+	{
+	    // Actual implementation of observable
+	    private int state;
+	
+	    public int GetState() => state;
+	
+	    public void SetState(int newState)
+	    {
+	        state = newState;
+	        Notify(newState);
+	    }
+	}
+	
+	abstract class Observer
+	{
+	    public void Update(int newValue)
+	    {
+	        Console.WriteLine($"Observer was notified {newValue}");
+	    }
+	}
+	
+	class ConcreteObserver : Observer
+	{
+	    // Maintain observer state
+	}

@@ -1,6 +1,6 @@
 local util = require 'lspconfig.util'
 
-require 'lspconfig'.terraformls.setup {
+vim.lsp.config["terraformls"] = {
 	-- default setup
 	cmd = { 'terraform-ls', 'serve' },
 	filetypes = { 'terraform', 'terraform-vars' },

@@ -1,1 +1,1 @@
-require'lspconfig'.dockerls.setup{}
+vim.lsp.config["dockerls"] = {}

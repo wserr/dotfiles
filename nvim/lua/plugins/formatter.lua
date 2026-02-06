@@ -26,7 +26,7 @@ return {
                     rust = {
                         function()
                             return {
-                                exe = "rustfmt",
+                                exe = " cargo fmt",
                                 stdin = true,
                             }
                         end,

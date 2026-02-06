@@ -1,1 +1,1 @@
-require'lspconfig'.csharp_ls.setup{}
+vim.lsp.config["csharp_ls"] = {}
