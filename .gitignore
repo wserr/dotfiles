@@ -64,7 +64,6 @@ zshell/**
 !zshell/.zshrc
 KeePass
 Signal
-fish
 go
 helm
 pulseaudio-ctl

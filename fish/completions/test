@@ -1,0 +1,1 @@
+complete -c myprog -l output -a '(myprog list-outputs)'
