@@ -323,26 +323,26 @@ load_plugins {
 // For more examples, see: https://github.com/zellij-org/zellij/tree/main/example/themes
 // Once these themes are defined, one of them should to be selected in the "theme" section of this file
 //
-// themes {
-//     dracula {
-//         fg 248 248 242
-//         bg 40 42 54
-//         red 255 85 85
-//         green 80 250 123
-//         yellow 241 250 140
-//         blue 98 114 164
-//         magenta 255 121 198
-//         orange 255 184 108
-//         cyan 139 233 253
-//         black 0 0 0
-//         white 255 255 255
-//     }
-// }
+themes {
+    custom {
+        fg 255 255 255
+        bg 30 30 46
+        red 255 69 58
+        green 255 140 0
+        yellow 255 214 10
+        blue 50 140 255
+        magenta 255 55 190
+        orange 255 140 0
+        cyan 0 230 255
+        black 0 0 0
+        white 255 255 255
+    }
+}
 
 // Choose the theme that is specified in the themes section.
 // Default: default
 //
-// theme "default"
+theme "custom"
 
 // The name of the default layout to load on startup
 // Default: "default"
