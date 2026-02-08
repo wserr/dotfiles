@@ -1,0 +1,4 @@
+function n
+    nvim .
+end
+
