@@ -34,6 +34,6 @@ git checkout stable
 > NOTE: when updating neovim version, first remove the .deps folder before rebuilding.
 
 ```bash
-sudo rm -r deps
+sudo rm -r .deps
 ...
 ```
