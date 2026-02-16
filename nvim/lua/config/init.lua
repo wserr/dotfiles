@@ -9,7 +9,6 @@ require("config.langservers.terraform")
 require("config.langservers.marksman")
 require("config.langservers.rust")
 require("config.langservers.python")
-require("config.langservers.typescript")
 require("config.langservers.cue")
 
 require("config.cmp")
