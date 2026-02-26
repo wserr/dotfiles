@@ -1,6 +1,5 @@
 set -gx EDITOR nvim
 
-
 if status is-interactive
     # Commands to run in interactive sessions can go here
 end
@@ -15,6 +14,6 @@ end
 # bun
 set --export BUN_INSTALL "$HOME/.bun"
 set --export PATH $HOME/.local/share/nvm/v25.6.1/bin $BUN_INSTALL/bin $PATH
-
 set --export DOTNET_ROOT "$HOME/.dotnet"
 set --export PATH $DOTNET_ROOT $DOTNET_ROOT/tools $PATH
+set --export PATH $BUN_INSTALL/bin $PATH
