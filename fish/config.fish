@@ -17,3 +17,6 @@ set --export PATH $HOME/.local/share/nvm/v25.6.1/bin $BUN_INSTALL/bin $PATH
 set --export DOTNET_ROOT "$HOME/.dotnet"
 set --export PATH $DOTNET_ROOT $DOTNET_ROOT/tools $PATH
 set --export PATH $BUN_INSTALL/bin $PATH
+
+# opencode
+fish_add_path /home/willem/.opencode/bin
