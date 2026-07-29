@@ -1,0 +1,18 @@
+snippet sample
+	namespace Slack;
+	
+	record SlackEvent {
+		string type;
+		string user;
+		string event_ts;
+		string? text;
+		string? reaction;
+		Item? item;
+	}
+	
+	record Item
+	{
+		string type;
+		string channel;
+		string ts;
+	}

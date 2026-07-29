@@ -1,0 +1,8 @@
+snippet init
+	hello-world:
+	        echo "hello world!"
+
+snippet efcoreMigrations
+	run-migrations-exporter-reactions name:
+	    export "DB__POSTGRES_CONNECTION_STRING"="Host=localhost;Port=5434;Database=postgres;Username=postgres;Password=postgres" && \
+	    dotnet ef migrations add {{ name }} --project exporter.infrastructure/exporter.infrastructure.csproj --startup-project exporter.service/exporter.service.csproj --context exporter.infrastructure.Database.SlackReactionContext

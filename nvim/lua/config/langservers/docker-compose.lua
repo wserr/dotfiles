@@ -1,1 +1,1 @@
-require'lspconfig'.docker_compose_language_service.setup{}
+vim.lsp.config["docker_compose_language_service"] = {}

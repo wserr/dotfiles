@@ -1,0 +1,208 @@
+snippet patternSingleton
+	class ${1:NAME}  {
+	    private static ${1:NAME} instance;
+	
+	    private ${1:NAME}() {
+	        System.out.println("Instance created");
+	    }
+	
+	    // If shared across threads, use synchronized keyword
+	    public static synchronized ${1:NAME} getInstance() {
+	        if (instance == null) {
+	            instance = new ${1:NAME}();
+	        }
+	        return instance;
+	    }
+	
+	    public void showMessage() {
+	        System.out.println("Hello from ${1:NAME}!");
+	    }
+	}
+
+snippet patternFactory
+	class ${1:NAME}Factory {
+		private static ${1:NAME}Factory instance;
+	
+		private Map<String, ${1:NAME}> registrations = new HashMap<String, ${1:NAME}>();
+	
+		public void RegisterInstance(String key, ${1:NAME} value) {
+			registrations.put(key, value);
+		}
+	
+		private ${1:NAME}Factory() {
+		}
+	
+		// If shared across threads, use synchronized keyword
+		public static synchronized ${1:NAME}Factory getInstance() {
+			if (instance == null) {
+				instance = new ${1:NAME}Factory();
+			}
+			return instance;
+		}
+	
+		public ${1:NAME} Create${1:NAME}(String key) {
+			var result = registrations.get(key);
+			return result.create${1:NAME}();
+		}
+	
+	}
+	
+	abstract class ${1:NAME} {
+		public abstract ${1:NAME} create${1:NAME}();
+	}
+	
+	class Import${1:NAME} extends ${1:NAME} {
+		public static void Register() {
+			${1:NAME}Factory.getInstance().RegisterInstance("Import${1:NAME}", new Import${1:NAME}());
+		}
+	
+		@Override
+		public ${1:NAME} create${1:NAME}() {
+			return new Import${1:NAME}();
+		}
+	
+		private Import${1:NAME}() {
+			System.out.println("Import${1:NAME} Initialized");
+		}
+	}
+	
+	class Export${1:NAME} extends ${1:NAME} {
+		public static void Register() {
+			${1:NAME}Factory.getInstance().RegisterInstance("Export${1:NAME}", new Export${1:NAME}());
+		}
+	
+		@Override
+		public ${1:NAME} create${1:NAME}() {
+			return new Export${1:NAME}();
+		}
+	}
+snippet patternFactoryMethod
+	class ${1:NAME}Factory extends Factory {
+		private static ${1:NAME}Factory instance;
+	
+		private Map<String, ${1:NAME}> registrations = new HashMap<String, ${1:NAME}>();
+	
+		public void RegisterInstance(String key, ${1:NAME} value) {
+			registrations.put(key, value);
+		}
+	
+		private ${1:NAME}Factory() {
+		}
+	
+		// If shared across threads, use synchronized keyword
+		public static synchronized ${1:NAME}Factory getInstance() {
+			if (instance == null) {
+				instance = new ${1:NAME}Factory();
+			}
+			return instance;
+		}
+	
+		public ${1:NAME} CreateObject(String key) {
+			return registrations.get(key);
+		}
+	}
+	
+	abstract class Factory {
+		public void anOperation(String type) {
+			var operationSubject = CreateObject(type);
+			operationSubject.Print();
+		}
+	
+		public abstract ${1:NAME} CreateObject(String key);
+	}
+	
+	abstract class ${1:NAME} {
+		public abstract void Print();
+	}
+	
+	class Import${1:NAME} extends ${1:NAME} {
+		public static void Register() {
+			${1:NAME}Factory.getInstance().RegisterInstance("Import${1:NAME}", new Import${1:NAME}());
+		}
+	
+		public void Print() {
+			System.out.println("I am an Import${1:NAME}");
+		}
+	}
+	
+	class Export${1:NAME} extends ${1:NAME} {
+		public static void Register() {
+			${1:NAME}Factory.getInstance().RegisterInstance("Export${1:NAME}", new Export${1:NAME}());
+		}
+	
+		public void Print() {
+			System.out.println("I am an Export${1:NAME}");
+		}
+	}
+snippet patternAbstractFactory
+
+	class ${1:NAME}FactoryCreator  {
+	    private static ${1:NAME}Factory instance;
+	
+	    // If shared across threads, use synchronized keyword
+	    public static synchronized ${1:NAME}Factory getInstance() {
+	        if (instance == null) {
+	            instance = new ${1:NAME}Factory();
+		    instance.RegisterA("A1", new ${1:NAME}A1());
+		    instance.RegisterB("B1", new ${1:NAME}B1());
+	        }
+	        return instance;
+	    }
+	
+	    public void showMessage() {
+	        System.out.println("Hello from ${1:NAME}FactoryFactory!");
+	    }
+	}
+	
+	class ${1:NAME}Factory {
+		protected Map<String, Abstract${1:NAME}A> registrationsA = new HashMap<String, Abstract${1:NAME}A>();
+		protected Map<String, Abstract${1:NAME}B> registrationsB = new HashMap<String, Abstract${1:NAME}B>();
+	
+		protected void RegisterA(String key, Abstract${1:NAME}A value) {
+			registrationsA.put(key, value);
+		}
+	
+		protected void RegisterB(String key, Abstract${1:NAME}B value) {
+			registrationsB.put(key, value);
+		}
+	
+		public Abstract${1:NAME}A CreateA(String key) {
+			return registrationsA.get(key);
+		}
+	
+		public Abstract${1:NAME}B CreateB(String key) {
+			return registrationsB.get(key);
+		}
+	}
+	
+	abstract class Abstract${1:NAME}A {
+		public abstract void Print();
+	}
+	
+	class ${1:NAME}A1 extends Abstract${1:NAME}A {
+		public void Print() {
+			System.out.println("${1:NAME}A1");
+		}
+	}
+	
+	class ${1:NAME}A2 extends Abstract${1:NAME}A {
+		public void Print() {
+			System.out.println("${1:NAME}A2");
+		}
+	}
+	
+	abstract class Abstract${1:NAME}B {
+		public abstract void Print();
+	}
+	
+	class ${1:NAME}B1 extends Abstract${1:NAME}B {
+		public void Print() {
+			System.out.println("${1:NAME}B1");
+		}
+	}
+	
+	class ${1:NAME}B2 extends Abstract${1:NAME}B {
+		public void Print() {
+			System.out.println("${1:NAME}B2");
+		}
+	}

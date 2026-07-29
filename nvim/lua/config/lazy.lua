@@ -35,18 +35,21 @@ vim.opt.rtp:prepend(lazypath)
 -- This is also a good place to setup other settings (vim.opt)
 -- vim.g.mapleader = " "
 -- vim.g.maplocalleader = "\\"
+--
 
 vim.filetype.add({
     extension = {
         mdx = "markdown",
 	unit = "systemd",
-	timer = "systemd"
+	timer = "systemd",
+	avdl = "avdl",
     },
 })
 vim.filetype.add({
   filename = {
     ['docker-compose.yml'] = 'yaml.docker-compose',
-  },
+    ['justfile'] = 'justfile',
+  } 
 })
 vim.opt.nu = true
 vim.opt.relativenumber = true
