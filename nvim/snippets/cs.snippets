@@ -37,7 +37,7 @@ snippet kafkaConsumerInit
 	    AutoOffsetReset = AutoOffsetReset.Earliest,
 	    EnableAutoCommit = false,
 	};
-	                                                                                             
+
 	return Task.Run(
 	    () =>
 	    {
@@ -52,7 +52,7 @@ snippet kafkaConsumerInit
 	                    var cr = c.Consume(stoppingToken);
 
 			    // TODO add consumer logic
-	                                                                                             
+
 	                    c.Commit();
 	                }
 	                catch (ConsumeException e)
@@ -79,7 +79,7 @@ snippet kafkaStreamConfig
 	        {
 	            ApplicationId = "streamiz",
 	            BootstrapServers = "localhost:9092",
-	            AutoOffsetReset = AutoOffsetReset.Latest,
+            	    AutoOffsetReset = Confluent.Kafka.AutoOffsetReset.Earliest,
 	            AllowAutoCreateTopics = false,
 	        };
 	        return config;
@@ -93,7 +93,7 @@ snippet kafkaStreamApplication
 	var t = builder.Build();
 	var stream = new KafkaStream(t, KafkaConfig.GetConfig());
 
-	await stream.StartAsync(stoppingToken);
+	await stream.StartAsync();
 
 snippet kafkaStreamTopology
 	public class StreamTopology
@@ -141,7 +141,54 @@ snippet kafkaStreamAggregation
             )
             .MapValues((k, _) => ()
             .ToStream()
-            .To<JsonSerDes<Windowed<String>>, JsonSerDes<Statistic>>("OutputStatistics");
+snippet currentKafkaStreamConfig
+	public static class KafkaConfig
+	{
+	    public static StreamConfig GetConfig()
+	    {
+	        var config = new StreamConfig()
+	        {
+	            ApplicationId = "current-example",
+	            BootstrapServers = "localhost:9092",
+            	    AutoOffsetReset = Confluent.Kafka.AutoOffsetReset.Earliest,
+	            AllowAutoCreateTopics = true,
+	        };
+	        return config;
+	    }
+	}
+snippet currentKafkaRecords
+	public record WeatherStationRecord(string weatherStationId, string name);
+	public record EnrichedWeatherRecord(Guid messageId, string weatherStationId, string weatherStationName, double value, long originalMessageTimestamp, long currentMessageTimestamp);
+	public record WeatherRecord(Guid messageId, string weatherStationId, double value, long timeStamp);
+
+snippet currentKafkaTableDefinition
+        var weatherStationsTable = builder.GlobalTable<string, WeatherStationRecord>(
+            "weather.stations",
+            new StringSerDes(),
+            new JsonSerDes<WeatherStationRecord>()
+        );
+
+snippet currentaStreamDefinition
+        var weatherRecordStream = builder.Stream<string, WeatherRecord>(
+            "weather.data",
+            new StringSerDes(),
+            new JsonSerDes<WeatherRecord>()
+        );
+
+snippet currentKafkaStreamTableJoin
+	var enrichedWeatherRecordStream = weatherRecordStream.Join(
+            weatherStationsTable,
+            (id, weatherRecord) => weatherRecord.weatherStationId,
+            (weatherRecord, station) =>
+                new EnrichedWeatherRecord(
+                    weatherRecord.messageId,
+                    weatherRecord.value,
+                    weatherRecord.timeStamp,
+                    DateTimeOffset.Now.ToUnixTimeMilliseconds()
+                )
+        );
+
+	enrichedWeatherRecordStream.To<StringSerDes, JsonSerDes<EnrichedWeatherRecord>>("demo.result");
 
 snippet patternSingleton
 	class ${1:NAME}
@@ -753,41 +800,41 @@ snippet patternMediator
 	        Colleague sender,
 	        MessagePublishedEventArgs args
 	    );
-	
+
 	    public event MessagePublishedEventHandler? MessagePublished;
-	
+
 	    public Mediator() { }
-	
+
 	    public void Send(Colleague me, string message)
 	    {
 	        MessagePublished?.Invoke(me, new MessagePublishedEventArgs(message));
 	    }
 	}
-	
+
 	class Colleague : IDisposable
 	{
 	    private readonly Mediator mediator;
-	
+
 	    public string Name { get; }
-	
+
 	    public Colleague(string name, Mediator mediator)
 	    {
 	        Name = name;
 	        this.mediator = mediator;
 	        mediator.MessagePublished += OnReceive;
 	    }
-	
+
 	    public void SendMessage(string message)
 	    {
 	        mediator.Send(this, message);
 	    }
-	
+
 	    public void Dispose()
 	    {
 	        mediator.MessagePublished -= OnReceive;
 	        Console.WriteLine($"{this.Name} has disconnected from the mediator");
 	    }
-	
+
 	    private void OnReceive(Colleague sender, MessagePublishedEventArgs args)
 	    {
 	        // Make sure this method catches events, so other Colleagues that are subscribed still get this event
@@ -814,17 +861,17 @@ snippet patternObserver
 	    // Abstract implementation
 	    // Responsible for notifying observers
 	    private List<Observer> observers = new List<Observer>();
-	
+
 	    public void Attach(Observer observer)
 	    {
 	        observers.Add(observer);
 	    }
-	
+
 	    public void Detach(Observer observer)
 	    {
 	        observers.Remove(observer);
 	    }
-	
+
 	    public void Notify(int newValue)
 	    {
 	        foreach (var observer in observers)
@@ -833,21 +880,21 @@ snippet patternObserver
 	        }
 	    }
 	}
-	
+
 	class ConcreteObservable : Observable
 	{
 	    // Actual implementation of observable
 	    private int state;
-	
+
 	    public int GetState() => state;
-	
+
 	    public void SetState(int newState)
 	    {
 	        state = newState;
 	        Notify(newState);
 	    }
 	}
-	
+
 	abstract class Observer
 	{
 	    public void Update(int newValue)
@@ -855,7 +902,7 @@ snippet patternObserver
 	        Console.WriteLine($"Observer was notified {newValue}");
 	    }
 	}
-	
+
 	class ConcreteObserver : Observer
 	{
 	    // Maintain observer state

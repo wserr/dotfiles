@@ -13,3 +13,4 @@ require("config.langservers.cue")
 
 require("config.cmp")
 require("config.treesitter")
+require("config.functions")
